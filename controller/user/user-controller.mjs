@@ -1,4 +1,6 @@
 
+
+import Listing from "../../models/listing-model.mjs";
 import User from "../../models/user-model.mjs";
 
 const test=(req,res)=>{
@@ -25,7 +27,8 @@ export const updateUser=async(req,res,next)=>{
 
         }
        },{new:true})
-       const validUser=await User.findById(req.params.id).select('-password')
+      const  validUser=await User.findById(req.params.id).select('-password')
+      
        res.json({
         success:true,validUser
        })
@@ -49,11 +52,37 @@ export const deleteUser=async(req,res)=>{
 
             }
         })
-        res.json({success:true ,})
+        res.json({success:true })
         
     } catch (error) {
         console.log(error);
         res.json({success:false,err_msg:"internal server error"})
     }
 
+}
+
+
+export const getUserListing=async(req,res,next)=>{
+    console.log("validUserid.",req.validUser.id);
+    console.log("paramsid.",req.params.id);
+   
+//  if (req.validUser._id !== req.params.id) {
+//    return res.status(401).json({
+//      success: false,
+//      err_msg: "You can only view your own listings!",
+//    });
+//  }
+        
+        try{
+          const listings = await Listing.find({ userRef: req.params.id });
+
+          
+          res.json({ success: true, listings });
+        }catch(error){
+            console.log(error);
+            res.json({success:false,err_msg:"internal server error"})
+        }
+
+    
+    
 }

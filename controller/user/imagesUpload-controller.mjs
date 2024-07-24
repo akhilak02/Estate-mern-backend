@@ -1,32 +1,28 @@
 // import imagesUpload from "../../models/imagesUpload-model.mjs"
 
-// const cloudinary=require("../../utils/cloudinary.mjs")
+import multer from "multer";
+import { upload } from "../../middleware/multer-middleware.mjs";
 
-// export const uploadOnCloudinary=async(req,res,next)=>{
+// Upload endpoint
+export const imageUpload = (req, res) => {
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: err.message,
+          field: err.field,
+          name: err.name,
+        });
+    } else if (err) {
+      return res.status(500).json({ success: false, message: "server Error" });
+    }
+console.log("path",`/temp/${req.files.filename}`);
 
-//     try {
+    const imageUrls = req.files.map((file) => `/temp/${file.filename}`);
+    res.status(200).json({ success: true, imageUrls });
+  });
+};
 
-//         let images=[...req.body.images]
-//         let imagesBuffer=[]
-
-//         for(let i=0;i<images.length;i++){
-//             const result=await cloudinary.uploader.upload(images[i],{
-//                 folder:"uploadimages"
-//             })
-
-//             imagesBuffer.push({
-
-//             })
-//         }
-       
-
-//         // const imagesupload=await imagesUpload.create();
-//         res.status(201).json({
-//             success:true,
-
-//         })
-
-//     } catch (error) {
-        
-//     }
-// }
+// app.use('/uploads', express.static('uploads'));
