@@ -1,13 +1,13 @@
 import multer from "multer";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
-
+import path from "path";
 
 
 //set storage engine
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/temp");
+    cb(null, "public/temp");
   },
   filename: function (req, file, cb) {
     const random=uuidv4()
@@ -16,14 +16,8 @@ const storage = multer.diskStorage({
 });
 
 
-//initialize upload
-export const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1024 * 1024 * 5 },
-}).array("imageUrls", 6);
-
 function checkFileType(file, cb) {
-  const filetypes = "/jpeg|jpg|png/";
+  const filetypes = /jpeg|jpg|png/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
 
@@ -33,5 +27,17 @@ function checkFileType(file, cb) {
     cb("Error: Images Only!");
   }
 }
+
+//initialize upload
+export const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 5 },
+  fileFilter:function(req,file,cb){
+    checkFileType(file, cb);
+  }
+    
+}).array("imageUrls", 6);
+
+
 
 

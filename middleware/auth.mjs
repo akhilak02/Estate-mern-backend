@@ -31,7 +31,8 @@ export const verifyUser = (req, res, next) => {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
       if (err) {
         console.error("JWT Verification Error:", err);
-        return res.json({
+        return res
+        .json({
           success: false,
           auth: false,
           err_msg: "your login has expired",

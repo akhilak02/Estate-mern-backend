@@ -86,3 +86,21 @@ export const getUserListing=async(req,res,next)=>{
     
     
 }
+
+export const getUser=async(req,res)=>{
+    try {
+            const user = await User.findById(req.params.id);
+
+            if (!user)
+              return res.json({ success: false, err_msg: "User Not Found" });
+              const validUser = await User.findById(req.params.id).select(
+                "-password"
+              );
+              res.json({success:true,validUser})
+        
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, err_msg: "internal server error" });
+    }
+
+}

@@ -27,10 +27,11 @@ app.use(morgan("dev"))
 app.use(express.json({limit:"50mb"}))
 app.use(express.urlencoded({extended:false}))
 app.use(express.static('public'))
+// app.use(express.static(path.join( "public")));
 app.use('/backend/user',userRouter)
 app.use('/backend/auth',authRoute)
 app.use('/backend/createlisting',listingRoute)
-app.use("/backend/uploads",imagesRoute);
+// app.use("/backend/uploads",imagesRoute);
 // app.use(
 //   "/backend/uploads/upload-images",
 //   upload.array("imageUrls", 6),
@@ -46,6 +47,17 @@ app.use("/backend/uploads",imagesRoute);
     
 //   }
 // );
+
+app.post("/backend/uploads/upload-images", (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({ message: err });
+    }
+    const filePaths = req.files.map((file) => `/temp/${file.filename}`);
+    res.json({success:true, imageUrls: filePaths });
+  });
+});
+
 app.use(handleErr);
 
 
