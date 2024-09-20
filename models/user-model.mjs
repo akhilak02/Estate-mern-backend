@@ -19,11 +19,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       default:
         "https://img.freepik.com/free-photo/portrait-beautiful-young-woman-with-curly-hair-brown-hat_1142-42780.jpg?size=626&ext=jpg&ga=GA1.1.934652532.1695620733&semt=sph",
-      required:true,
+      required: true,
     },
+    role: { type: String, default: "user" }, // 'user' or 'admin'
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("users", userSchema);
+
 export default User;

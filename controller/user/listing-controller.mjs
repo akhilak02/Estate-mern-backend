@@ -100,3 +100,39 @@ export const getListings=async(req,res)=>{
     res.json({ success: false, err_msg: "internal server error" });
     }
 }
+
+export const booking=async(req,res)=>{
+ try {
+   const { userId, date } = req.body; // Destructure userId and date from request body
+   const listing = await Listing.findById(req.params.id);
+   if (!listing) {
+     return res.json({ success: false, err_msg: "Listing not found" });
+   }
+   // Initialize bookings if undefined
+   if (!Array.isArray(listing.booking)) {
+     listing.booking = [];
+   }
+   // Check if the user has already booked this date
+   const alreadyBooked = listing.booking.some(
+     (bookings) =>
+       bookings.userId.toString() === userId &&
+       new Date(bookings.date).getTime() === new Date(date).getTime()
+   );
+   if (alreadyBooked) {
+     return res.json({
+       success: false,
+       message: "Date already booked by this User",
+     });
+   }
+   listing.booking.push({ userId, date: new Date(date) });
+   await listing.save();
+   return res
+     .status(200)
+     .json({ success: true, message: "Booking successful", listing });
+ } catch (error) {
+     console.error("Error booking the visit date:", error);
+     return res
+       .status(500)
+       .json({ success: false, message: "Internal server error" });
+ }
+}

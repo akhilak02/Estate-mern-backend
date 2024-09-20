@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const imageSchema = mongoose.Schema(
+const imageSchema =new mongoose.Schema(
   {
     imageUrls: [
       {
@@ -12,5 +12,5 @@ const imageSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const imagesUpload = mongoose.model("imagesupload", imageSchema);
+const imagesUpload = mongoose.model("imagesuploads", imageSchema);
 export default imagesUpload;

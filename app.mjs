@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 import  { configDotenv } from 'dotenv'
 import userRouter from './routes/user/userRouter.mjs'
 import authRoute from'./routes/user/authRoute.mjs'
+import adminauthRoute from './routes/admin/adminauthRoute.mjs'
 import listingRoute from './routes/user/listingRoute.mjs'
 import imagesRoute from './routes/user/imagesRoute.mjs'
+import adminRoute from "./routes/admin/adminRoute.mjs";
 import connectDB from "./connections/mongo-connect.mjs";
 import morgan from "morgan";
 import cors from  "cors"
@@ -31,6 +33,8 @@ app.use(express.static('public'))
 app.use('/backend/user',userRouter)
 app.use('/backend/auth',authRoute)
 app.use('/backend/createlisting',listingRoute)
+app.use('/admin/auth',adminauthRoute)
+app.use("/admin/", adminRoute);
 // app.use("/backend/uploads",imagesRoute);
 // app.use(
 //   "/backend/uploads/upload-images",

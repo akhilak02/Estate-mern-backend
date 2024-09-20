@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-const listingSchema = mongoose.Schema(
+const listingSchema =new mongoose.Schema(
   {
     name: {
       type: String,
@@ -55,9 +55,15 @@ const listingSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    booking: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        date: { type: Date },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-const Listing= mongoose.model("listing",listingSchema)
+const Listing= mongoose.model("listings",listingSchema)
 export default Listing
